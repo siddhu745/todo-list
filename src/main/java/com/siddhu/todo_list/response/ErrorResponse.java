@@ -19,8 +19,8 @@ public class ErrorResponse {
     @JsonProperty
     private String path;
 
-    public ErrorResponse(Date timestamp, int status, String error, String message, String path) {
-        this.timestamp = timestamp;
+    public ErrorResponse(int status, String error, String message, String path) {
+        this.timestamp = new Date();
         this.status = status;
         this.error = error;
         this.message = message;

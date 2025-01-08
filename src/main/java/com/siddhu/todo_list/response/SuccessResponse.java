@@ -23,11 +23,11 @@ public class SuccessResponse {
     @JsonProperty
     private Date timestamp;
 
-    public SuccessResponse(String status,String message,Object data,Object meta,Date timestamp) {
-        this.status = status;
+    public SuccessResponse(String message,Object data,Object meta) {
+        this.status = "success";
         this.message = message;
         this.data = data;
         this.meta = meta;
-        this.timestamp = timestamp;
+        this.timestamp = new Date();
     }
 }
