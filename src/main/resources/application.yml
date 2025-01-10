@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: todo-list
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET}
+      expiration: ${JWT_EXPIRATION}
+
+main:
+  web-application-type: servlet
+  

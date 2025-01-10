@@ -2,15 +2,17 @@ package com.siddhu.todo_list.user;
 
 
 import com.siddhu.todo_list.response.SuccessResponse;
+import com.siddhu.todo_list.response.TodoAuthenticationResponse;
+import com.siddhu.todo_list.security.JwtService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 
 @RequestMapping("/user")
@@ -18,29 +20,49 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
     public UserController(UserService userService,
-                          AuthenticationManager authenticationManager) {
+                          AuthenticationManager authenticationManager,
+                          JwtService jwtService) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
+
+    @GetMapping("/secured")
+    String secured() {
+        return "this is secured route";
+    }
+
 
     @PostMapping("/register")
     ResponseEntity<?> register(@Valid @RequestBody UserDto userDto) throws Exception {
         userService.registerUser(userDto);
-        return login(userDto);
+        return login(new UserAuthDto(userDto.email(),userDto.password()));
     }
 
     @PostMapping("/login")
-    ResponseEntity<?> login(@Valid @RequestBody UserDto userDto) {
+    ResponseEntity<?> login(@Valid @RequestBody UserAuthDto userAuthDto) {
+
         Authentication authenticationRequest =
-                UsernamePasswordAuthenticationToken.unauthenticated(userDto.email(), userDto.password());
+                UsernamePasswordAuthenticationToken.unauthenticated(userAuthDto.email(), userAuthDto.password());
+
         Authentication authenticationResponse =
                 authenticationManager.authenticate(authenticationRequest);
+
+        String token = jwtService.generateToken(authenticationResponse,userAuthDto);
+
+        TodoAuthenticationResponse todoAuthenticationResponse = new TodoAuthenticationResponse(
+                authenticationResponse.getName(),
+                userAuthDto.email(),
+                token
+        );
+
         return ResponseEntity.ok(new SuccessResponse(
                 "login successful",
-                authenticationResponse,
-                1)
-        );
+                todoAuthenticationResponse,
+                1
+        ));
     }
 }

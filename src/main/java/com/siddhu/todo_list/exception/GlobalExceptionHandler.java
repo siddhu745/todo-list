@@ -76,4 +76,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<?> handleInvalidTokenException(InvalidTokenException e, WebRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                e.getMessage(),
+                request.getDescription(false).substring(4)
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
 }

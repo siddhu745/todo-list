@@ -1,5 +1,6 @@
 package com.siddhu.todo_list.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,6 +23,7 @@ public class User implements UserDetails {
     private Integer id;
     private String username;
     private String email;
+    @JsonIgnore
     private String password;
 
     Collection<? extends GrantedAuthority> authorities = getAuthorities();
