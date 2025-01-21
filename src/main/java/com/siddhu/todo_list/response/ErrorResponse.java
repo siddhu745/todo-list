@@ -1,26 +1,24 @@
 package com.siddhu.todo_list.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 
 import java.util.Date;
 
-@Data
 public class ErrorResponse {
 
     @JsonProperty
-    private Date timestamp;
+    String timestamp;
     @JsonProperty
-    private int status;
+    int status;
     @JsonProperty
-    private String error;
+    String error;
     @JsonProperty
-    private String message;
+    String message;
     @JsonProperty
-    private String path;
+    String path;
 
     public ErrorResponse(int status, String error, String message, String path) {
-        this.timestamp = new Date();
+        this.timestamp = new Date().toString();
         this.status = status;
         this.error = error;
         this.message = message;

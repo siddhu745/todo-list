@@ -1,6 +1,5 @@
 package com.siddhu.todo_list.security;
 
-import com.siddhu.todo_list.exception.InvalidTokenException;
 import com.siddhu.todo_list.user.UserAuthDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -10,8 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.spec.SecretKeySpec;
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,26 +61,14 @@ public class JwtService {
 
     // Extract all claims from the token
     private Claims extractAllClaims(String token) {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(
-                secretKey.getBytes(),
-                getSignKey().getAlgorithm()
-        );
-
-        try {
-            return Jwts.parser()
-                    .verifyWith(secretKeySpec)
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
-        } catch (Exception e) {
-            throw new InvalidTokenException(e.getMessage());
-        }
-
-
-
+        return Jwts.parser()
+                .verifyWith(getSignKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
-    private Key getSignKey() {
+    private SecretKey getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
