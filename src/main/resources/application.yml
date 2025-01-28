@@ -20,6 +20,9 @@ application:
     jwt:
       secret-key: ${JWT_SECRET}
       expiration: ${JWT_EXPIRATION}
+cors:
+  allowed-origins: ${ALLOWED_ORIGINS}
+  allowed-methods: ${ALLOWED_METHODS}
 
 main:
   web-application-type: servlet
