@@ -22,8 +22,13 @@ application:
       expiration: ${JWT_EXPIRATION}
 cors:
   allowed-origins: ${ALLOWED_ORIGINS}
-  allowed-methods: ${ALLOWED_METHODS}
 
 main:
   web-application-type: servlet
-  
+
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG

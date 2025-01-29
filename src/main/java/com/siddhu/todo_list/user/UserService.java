@@ -1,9 +1,9 @@
 package com.siddhu.todo_list.user;
 
 import com.siddhu.todo_list.exception.DuplicateResourceException;
+import com.siddhu.todo_list.exception.NotFoundException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +30,8 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws NotFoundException {
         return userDao.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("user not found"));
+                .orElseThrow(() -> new NotFoundException("user not found"));
     }
 }

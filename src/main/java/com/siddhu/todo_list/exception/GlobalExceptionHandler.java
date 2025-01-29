@@ -4,7 +4,6 @@ import com.siddhu.todo_list.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,9 +14,12 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // handle all other exceptions
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleGeneralExceptions(Exception e, WebRequest request) {
+    public ResponseEntity<?> handleGlobalException(Exception e, WebRequest request) {
+        Throwable cause = e.getCause();
+        if (cause instanceof NotFoundException) {
+            return handleNotFoundException((NotFoundException) cause, request);
+        }
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
@@ -29,7 +31,7 @@ public class GlobalExceptionHandler {
 
      // 405 method not allowed
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<?> handleGeneralExceptions(HttpRequestMethodNotSupportedException e, WebRequest request) {
+    public ResponseEntity<?> handleMethodNotSupportedException(HttpRequestMethodNotSupportedException e, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.METHOD_NOT_ALLOWED.value(),
                 HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase(),
@@ -52,8 +54,8 @@ public class GlobalExceptionHandler {
     }
 
     //handle username not found 404
-    @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<?> handleUsernameNotFoundException(UsernameNotFoundException e, WebRequest request) {
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<?> handleNotFoundException(NotFoundException e, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(),
@@ -65,11 +67,11 @@ public class GlobalExceptionHandler {
 
     //401
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<?> handleBadCredentials(BadCredentialsException e, WebRequest request) {
+    public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException e, WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.UNAUTHORIZED.value(),
                 HttpStatus.UNAUTHORIZED.getReasonPhrase(),
-                e.getMessage(),
+                "password incorrect",
                 request.getDescription(false).substring(4)
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);

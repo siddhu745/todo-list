@@ -11,13 +11,12 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${cors.allowed-origins}")
     private String allowedOrigin;
 
-    @Value("${cors.allowed-methods}")
-    private String allowedMethod;
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // Apply to all paths
                 .allowedOrigins(allowedOrigin) // Allow the frontend to access the backend
-                .allowedMethods(allowedMethod) // Allow necessary HTTP methods
-                .allowedHeaders("*"); // Allow any headers
+                .allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS") // Allow necessary HTTP methods
+                .allowedHeaders("*")  // Allow any headers
+                .allowCredentials(true);
     }
 }
