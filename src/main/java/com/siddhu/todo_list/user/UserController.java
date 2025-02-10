@@ -5,14 +5,11 @@ import com.siddhu.todo_list.response.SuccessResponse;
 import com.siddhu.todo_list.response.TodoAuthenticationResponse;
 import com.siddhu.todo_list.security.JwtService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 
 
 @RequestMapping("/user")
@@ -30,9 +27,9 @@ public class UserController {
         this.jwtService = jwtService;
     }
 
-    @GetMapping("/secured")
-    String secured() {
-        return "this is secured route";
+    @GetMapping("/validate-token")
+    String validateToken() {
+        return "token validated successfully";
     }
 
 
