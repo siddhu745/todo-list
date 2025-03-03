@@ -22,7 +22,7 @@ public class UserService implements UserDetailsService {
             throw new DuplicateResourceException("email already exists");
         }
         User user = new User(
-                userDto.username(),
+                userDto.email().split("@")[0],
                 userDto.email(),
                 passwordEncoder.encode(userDto.password())
         );

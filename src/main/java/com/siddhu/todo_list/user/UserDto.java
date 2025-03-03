@@ -3,12 +3,6 @@ package com.siddhu.todo_list.user;
 import jakarta.validation.constraints.*;
 
 public record UserDto(
-        @NotNull(message = "username must not be null")
-        @NotBlank(message = "username must not be blank")
-        @Size(min = 3,message = "invalid username, minimum three characters required")
-        @Size(max = 20, message = "please use simple username")
-        String username,
-
         @NotNull(message = "email must not be null")
         @NotBlank(message = "email must not be blank")
         @Email(message = "invalid email")
