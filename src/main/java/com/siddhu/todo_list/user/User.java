@@ -11,9 +11,8 @@ import java.util.Collection;
 import java.util.List;
 
 
-
 @Entity
-@Table(name = "todo_users",uniqueConstraints = {
+@Table(name = "todo_users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")
 })
 @Data
@@ -30,13 +29,14 @@ public class User implements UserDetails {
 
     Collection<? extends GrantedAuthority> authorities = getAuthorities();
 
-    public User(String username,String email,String password) {
+    public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
     }
 
-    public User() {}
+    public User() {
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -51,6 +51,11 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+
+    public String getEmail() {
+        return email;
     }
 
 
