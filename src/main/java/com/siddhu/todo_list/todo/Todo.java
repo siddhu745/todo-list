@@ -65,6 +65,13 @@ public class Todo {
         this.state = state;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
 
     @Override

@@ -39,9 +39,12 @@ public class TodoService {
         return todo.get();
     }
 
-    public void updateTodo(int id) {
-        Todo todo = getById(id);
-
+    public TodoDTO updateTodo(TodoDTO todoDTO) {
+        Todo todo = getById(todoDTO.id());
+        todo.setName(todoDTO.name());
+        todo.setDescription(todoDTO.description());
+        todo = todoDao.save(todo);
+        return mapTodoDto(todo);
     }
 
 

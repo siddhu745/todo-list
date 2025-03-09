@@ -23,6 +23,8 @@ public class TodoController {
             @RequestBody TodoDTO todoDTO,
             @AuthenticationPrincipal User user
     ) {
+        System.out.println(todoDTO);
+        if (todoDTO.id() != 0) return updateTodo(todoDTO);
         todoService.insertTodo(todoDTO, user);
         return ResponseEntity.ok(new SuccessResponse(
                 "todo created",
@@ -42,9 +44,13 @@ public class TodoController {
         ));
     }
 
-    @PutMapping("/{id}")
-    ResponseEntity<?> updateTodo(@PathVariable int id, TodoDTO todo) {
-        return null;
+    ResponseEntity<?> updateTodo(TodoDTO todo) {
+        TodoDTO updatedTodo = todoService.updateTodo(todo);
+        return ResponseEntity.ok(new SuccessResponse(
+                "updated successfully",
+                updatedTodo,
+                1
+        ));
     }
 
     @PatchMapping("/{id}/{state}")
