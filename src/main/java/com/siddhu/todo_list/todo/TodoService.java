@@ -43,6 +43,7 @@ public class TodoService {
         Todo todo = getById(todoDTO.id());
         todo.setName(todoDTO.name());
         todo.setDescription(todoDTO.description());
+        todo.setState("TODO");
         todo = todoDao.save(todo);
         return mapTodoDto(todo);
     }
